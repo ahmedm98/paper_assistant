@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import requests
 
-backend_url="http://127.0.0.1:8000/get_papers"
+from config import Backend_URL
 
 st.title("Your AI Assistant")
 
@@ -25,7 +25,7 @@ if st.button("search"):
 
     data=json.dumps(inputs)
     print(data)
-    res= requests.post(url=backend_url,data=data)
+    res= requests.post(url=Backend_URL,data=data)
 
     
     output=json.loads(res.content)
