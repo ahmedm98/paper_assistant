@@ -30,10 +30,10 @@ class Similarity_calculator():
         top=scores_arr.argsort()[-k:][::-1]
 
 
-        papers = [self.dataset.iloc[i]["paper"] for i in top]
-        summaries = [self.dataset.iloc[i]["summary"] for i in top]
-        abstract = [self.dataset.iloc[i]["abstract"] for i in top]
-        similarity_scores = [ scores[i] for i in top]
+        papers = [str(self.dataset.iloc[i]["paper"]) for i in top]
+        summaries = [str(self.dataset.iloc[i]["summary"]) for i in top]
+        abstract = [str(self.dataset.iloc[i]["abstract"]) for i in top]
+        similarity_scores = [ round(scores[i],4) for i in top]
 
         return {
                 "papers":papers,

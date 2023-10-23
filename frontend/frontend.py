@@ -21,7 +21,7 @@ inputs= {
 
 
 if st.button("search"):
-    col1, col2 = st.columns(2,gap="medium")
+    col1, col2 = st.columns([3,1],gap="large")
 
     data=json.dumps(inputs)
     print(data)
