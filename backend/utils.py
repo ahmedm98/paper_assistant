@@ -10,7 +10,7 @@ class Similarity_calculator():
     def __init__(self):
 
         self.model = SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
-        self.data_path = Path("data/updated_papers_dataset2.csv")
+        self.data_path = Path("updated_papers_dataset2.csv")
         self.dataset = pd.read_csv(self.data_path)
 
     def get_top(self,paragraph,k):
