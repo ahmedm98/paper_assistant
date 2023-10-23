@@ -4,7 +4,7 @@ This repository creates a web application where you input a sentence or a paragr
 # Setup
 To launch the application
 - First, you need to install [Docker](https://www.docker.com/products/docker-desktop/) if you do not already have it.
-- Make sure the docker daemon is running (open docker desktop)
+- Make sure the docker daemon is running (open docker desktop).
 - Run the command
 ```
 docker compose up
