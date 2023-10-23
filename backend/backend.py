@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from backend.utils import Similarity_calculator
+from utils import Similarity_calculator
 
 class User_input(BaseModel):
     paragraph : str
