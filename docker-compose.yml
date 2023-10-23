@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+  frontend:
+    build: frontend
+    ports:
+      - 8501:8501
+    networks: 
+      - deploy_network
+    depends_on:
+      - backend
+    volumes:
+        - ./frontend:/app
+
+  backend:
+    build: backend
+    ports:
+      - 8000:8000
+    networks: 
+      - deploy_network
+    volumes:
+      - ./backend:/app
+    
+
+networks:
+  deploy_network:
+    driver: bridge
