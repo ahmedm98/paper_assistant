@@ -7,8 +7,9 @@ from tqdm import tqdm
 def evaluate_method(data_path):
     '''Evaluate the current method of computing paper similarity:
     For every paper's abstract, retrieve the top 3 most similar papers.
-    Note that the abstracts have been omitted from the text used to create the summaries.
-    If the original paper of the abstract appears in the recommended 3 papers then this counts as
+    Note that the abstracts have been omitted from the text used to 
+    create the summaries. If the original paper of the abstract 
+    appears in the recommended 3 papers then this counts as
     a correct prediction. If not, then it is false prediction.
 
     :param data_path: the path to the dataset

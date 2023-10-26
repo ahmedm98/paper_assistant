@@ -19,5 +19,15 @@ sim_calc = Similarity_calculator()
 
 @app.post("/get_papers")
 def get_papers(input:User_input):
+    '''
+    Recieves the frontend server requests.
+
+    :param input: the paragrpah of the user 
+                which is to be compared to the database. 
+    :type input: User_input
+    
+    :returns: the top k papers.
+    :rtype: dict
+    '''
     result = sim_calc.get_top(input.paragraph,input.k)
     return result
