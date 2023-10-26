@@ -35,5 +35,5 @@ poetry run python evaluation.py
 # Possible Next Steps
 
 - Create other methods to compute the summaries and the similarity scores. And compare the performances of the different methods.
-- Add a pipeline that lets the user add more paper to the database.
+- Add a pipeline that lets the user add more papers to the database.
 - Standardize the text preprocessing pipeline.
