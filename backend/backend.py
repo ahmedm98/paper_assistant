@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from utils import Similarity_calculator
+from utils import SimilarityCalculator
+
 
 class User_input(BaseModel):
     '''Represents the user input.
@@ -15,7 +16,7 @@ class User_input(BaseModel):
 
 
 app = FastAPI()
-sim_calc = Similarity_calculator()
+sim_calc = SimilarityCalculator()
 
 @app.post("/get_papers")
 def get_papers(input:User_input):
@@ -23,7 +24,7 @@ def get_papers(input:User_input):
     Recieves the frontend server requests.
 
     :param input: the paragrpah of the user 
-                which is to be compared to the database. 
+            which is to be compared to the database. 
     :type input: User_input
     
     :returns: the top k papers.

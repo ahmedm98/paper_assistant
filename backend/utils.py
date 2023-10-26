@@ -6,7 +6,7 @@ from numpy.linalg import norm
 from sentence_transformers import SentenceTransformer
 
 
-class Similarity_calculator():
+class SimilarityCalculator():
     '''Encodes the input text and retrieves the k most similar papers.'''
 
     def __init__(self, data_path="updated_papers_dataset2.csv"):
@@ -16,12 +16,14 @@ class Similarity_calculator():
         :type data_path: str
         '''
 
-        self.model = SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
+        self.model = SentenceTransformer(
+            'sentence-transformers/all-mpnet-base-v2'
+            )
         self.data_path = Path(data_path)
         self.dataset = pd.read_csv(self.data_path)
 
     def get_top(self, paragraph, k):
-        '''retrieve the k most similar papers to the input text.
+        '''Retrieve the k most similar papers to the input text.
 
         :param paragraph: user input text.
         :type paragraph: str

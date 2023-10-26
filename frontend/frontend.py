@@ -12,7 +12,7 @@ k = st.slider("Pick the number of papers to be suggested",1,5,3)
 text = st.text_area('Your Paragraph',height=100)
 
 
-inputs= {
+inputs = {
         "paragraph": text,
         "k": k
     }
