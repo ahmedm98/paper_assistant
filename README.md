@@ -26,7 +26,7 @@ poetry run python evaluation.py
 
 # Method description
 
-- Every paper's extracted text is first preprocessed by removing the abstract, tables, title lines and empty lines. This preprocessed text is then fed to Llama2 to produce a three sentence summary for every paper. 
+- Every paper's extracted text is first preprocessed by removing the abstract, tables, title lines and empty lines. This preprocessed text is then fed to Llama2 to produce a three sentence summary. 
 - Using the sentence transformer model all-mpnet-base-v2, we encode each summary as a 768 dimensional vector.
 - A database is then created storing the names of the papers, their summaries, their abstracts and their vectors.
 - After the user inputs a paragraph through the streamlit frontend, the paragraph is sent to the FastAPI backend where it gets encoded as a 768 vector using the all-mpnet-base-v2 model. This vector is then compared to every vector in the database by computing the cosine distance. The three papers with the highest cosine distance are picked and sent back to the frontend with their names, their summaries, their abstracts and their cosine similarity score.
