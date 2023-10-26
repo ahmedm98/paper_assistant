@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-from backend.utils import Similarity_calculator
+from backend.utils import SimilarityCalculator
 from tqdm import tqdm
 
 
@@ -20,7 +20,7 @@ def evaluate_method(data_path):
     '''
 
     data = pd.read_csv(Path(data_path))
-    sim_calc = Similarity_calculator(data_path) 
+    sim_calc = SimilarityCalculator(data_path) 
     predictions = []
     with tqdm(total=len(data)) as progress:
         for i in data.index:

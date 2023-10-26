@@ -19,7 +19,11 @@ To evaluate the current method, you can run the python file evaluation.py. It co
 
 Note that the abstracts have been omitted from the text used to summarize the papers. Also, the similarity score is computed between the input paragraph and the summary of a paper. 
 
-evaluation.py produces an accuracy measure. To execute the file, you have to download [poetry](https://python-poetry.org/docs/#installation) then run the following command.
+evaluation.py produces an accuracy measure. To execute the file, you have to download [poetry](https://python-poetry.org/docs/#installation) then run the following commands.
+```
+poetry install
+```
+then
 ```
 poetry run python evaluation.py
 ```
