@@ -3,9 +3,9 @@ import os
 from database import paper_collection
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from llm_feats import get_summary
 from pydantic import BaseModel
 from pymongo.errors import DuplicateKeyError
-from utils import PaperDatabase
 
 
 class PaperName(BaseModel):
@@ -13,7 +13,6 @@ class PaperName(BaseModel):
 
 
 app = FastAPI()
-data = PaperDatabase()
 
 
 # remove later. Just for development.
@@ -42,7 +41,8 @@ def upload_file(file: UploadFile = File(...)):
 
     # Save the reference in MongoDB
     paper_doc = {"name": file.filename, "file_path": file_location}
-
+    summary = get_summary(paper_doc)
+    paper_doc["summary"] = summary
     try:
         result_id = paper_collection.insert_one(paper_doc)
         result_id = result_id.inserted_id
