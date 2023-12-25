@@ -53,13 +53,14 @@ def upload_file(file: UploadFile = File(...)):
         buffer.write(file.file.read())
 
     # produce and save a summary
+    summary = get_summary(file.filename)
     paper_doc = {
         "name": file.filename,
         "file_path": file_location,
-        "summary": get_summary(file.filename),
+        "summary": summary,
     }
 
-    # Save the reference in db
+    # Save the paper in db
     try:
         collection.add(
             ids=[paper_doc["name"]],

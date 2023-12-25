@@ -36,6 +36,7 @@ def send_prompt_to_openai(prompt, system_role):
 
 
 def get_summary(paper: str):
+    print(paper)
     process_pdf_grobid(file=f"files/{paper}")
     file_location = f"files/{paper.replace('.pdf','')}.grobid.tei.xml"
     print(file_location)
@@ -63,7 +64,7 @@ def get_embedding(text, model="text-embedding-ada-002"):
     api_key = os.getenv("OPENAI_KEY")
     client = OpenAI(api_key=api_key)
 
-    text = text[0].replace("\n", " ")
+    text = text.replace("\n", " ")
     return (
         client.embeddings.create(input=[text], model=model).data[0].embedding
     )

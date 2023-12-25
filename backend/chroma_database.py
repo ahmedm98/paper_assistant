@@ -1,12 +1,15 @@
 import chromadb
-from chromadb import EmbeddingFunction
+from chromadb import Documents, EmbeddingFunction, Embeddings
 from llm_feats import get_embedding
 
 
 class MyEmbeddingFunction(EmbeddingFunction):
-    def __call__(self, input: str) -> list:
-        embedding = get_embedding(input)
-        return [embedding]
+    def __call__(self, input: Documents) -> Embeddings:
+        embeddings = []
+        for doc in input:
+            embeddings.append(get_embedding(doc))
+            print("produced am embedding!")
+        return embeddings
 
 
 client = chromadb.PersistentClient(path="chroma_data")
