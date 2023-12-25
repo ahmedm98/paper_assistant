@@ -18,7 +18,7 @@ function App() {
         fetchPapers();
     },[fetchPapers]);
 
-    const handleDeletePaper = (paperName) => {
+    const handleDeletePaper = async (paperName) => {
         fetch(url+"deletepdf", {
           method: 'POST',
           headers: {
@@ -26,9 +26,13 @@ function App() {
           },
           body: JSON.stringify({ name: paperName }),
         })
-        .then(response => {
+        .then(async response => {
+          const data = await response.json();
+
           if (!response.ok) {
-            throw new Error('Failed to delete paper');
+            throw new Error(data.message || 'Failed to delete paper');
+          } else {
+            alert(`Deletion message: ${data.message}`);
           }
           fetchPapers();  // Refresh the paper list
         })

@@ -1,11 +1,10 @@
-import os
-
 from database import paper_collection
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from llm_feats import get_summary
 from pydantic import BaseModel
 from pymongo.errors import DuplicateKeyError
+from utils import delete_document
 
 
 class PaperName(BaseModel):
@@ -56,21 +55,18 @@ def upload_file(file: UploadFile = File(...)):
 @app.post("/deletepdf")
 def delete_pdf(paper: PaperName):
     file_name = paper.name
-    file_location = f"files/{file_name}"
+    file_deletion = delete_document(file_name)
+    db_result = paper_collection.delete_one({"name": file_name})
 
-    if os.path.exists(file_location):
-        os.remove(file_location)
-        file_deletion = "File is found and deleted"
-    else:
-        print("The file does not exist")
-        file_deletion = "File is not found"
-
-    result = paper_collection.delete_one({"name": file_name})
-
-    if result.deleted_count == 0:
+    if db_result.deleted_count == 0:
         raise HTTPException(
             status_code=404,
             detail=f"File not found in database. {file_deletion}.",
         )
-
-    return {"message": f"File deleted successfully. {file_deletion}"}
+    print(db_result, file_deletion)
+    return {
+        "message": (
+            f"{db_result.deleted_count} Files with name {file_name} deleted"
+            f" successfully. {file_deletion}"
+        )
+    }
