@@ -16,7 +16,7 @@ def process_pdf_grobid(
     )
 
 
-def send_to_openai(prompt, system_role):
+def send_prompt_to_openai(prompt, system_role):
     load_dotenv()
 
     with open("configs/openai_config.json", "r") as jsonfile:
@@ -35,11 +35,9 @@ def send_to_openai(prompt, system_role):
     return response
 
 
-def get_summary(paper_doc: dict):
-    process_pdf_grobid(file=f"files/{paper_doc['name']}")
-    file_location = (
-        f"files/{paper_doc['name'].replace('.pdf','')}.grobid.tei.xml"
-    )
+def get_summary(paper: str):
+    process_pdf_grobid(file=f"files/{paper}")
+    file_location = f"files/{paper.replace('.pdf','')}.grobid.tei.xml"
     print(file_location)
     if os.path.exists(file_location):
         full_text = extract_text_from_xml(file_location)
@@ -54,6 +52,18 @@ def get_summary(paper_doc: dict):
     """  # noqa: E501
 
     system_role = "You are a helpful summarizer."
-    response = send_to_openai(prompt=prompt, system_role=system_role)
+    response = send_prompt_to_openai(prompt=prompt, system_role=system_role)
     summary = response.choices[0].message.content
     return summary
+
+
+def get_embedding(text, model="text-embedding-ada-002"):
+    load_dotenv()
+
+    api_key = os.getenv("OPENAI_KEY")
+    client = OpenAI(api_key=api_key)
+
+    text = text[0].replace("\n", " ")
+    return (
+        client.embeddings.create(input=[text], model=model).data[0].embedding
+    )

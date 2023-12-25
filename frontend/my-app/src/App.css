@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=noto:wght@400;700&display=swap');
+
+
+body {
+    background-image: url('../public/denim.webp');
+    background-position: center;
+    color: #f5f5f5; /* Off-white font color */
+    font-family: 'Roboto', sans-serif; /* Example font */
+
+  }
+
+.table-container {
+    width: 50%; /* Full width */
+
+    background-color: #fff; /* White background for the table */
+    border-radius: 10px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensures the border radius applies to the table rows */
+    margin: 20px; /* Space around the table */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add some shadow for depth */
+  }
+  
+.table-container table {
+    width: 100%; /* Full width */
+    border-collapse: collapse; /* Removes the space between borders */
+  
+}
+  
+.table-container th,
+.table-container td {
+    text-align: center; /* Align text to the left */
+    padding: 12px 20px; /* Padding inside cells */
+    color: #333333; /* Specific font color for table cells */
+
+  }
+  
+.table-container tr {
+    border-bottom: 1px solid #ddd; /* Delimitation between rows */
+    cursor: pointer; /* Change cursor on hover */
+  }
+  
+.table-container tr:hover {
+    background-color: #f5f5f5; /* Highlight row on hover */
+  }
+  
+.table-container th {
+    background-color: #414aaa; /* Background color for the header */
+    color: rgb(248, 241, 241); /* White text for the header */
+  }
+  
+.button-container {
+    text-align: center; /* Center the buttons */
+    width: 100%; /* Match the width of the table */
+  }

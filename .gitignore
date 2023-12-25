@@ -3,7 +3,7 @@ models
 .env
 *pyc
 .ipynb
-
+chroma_data
 files/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 # dependencies

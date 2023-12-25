@@ -5,8 +5,8 @@ function PaperList({ papers, onDelete }) {
   console.log('Rendering papers:', papers);
   const [selectedPaper, setSelectedPaper] = useState(null);
 
-  const handleRowClick = (paperName) => {
-    setSelectedPaper(paperName);
+  const handleRowClick = (paper) => {
+    setSelectedPaper(paper);
   };
 
   const handleDelete = () => {
@@ -17,24 +17,25 @@ function PaperList({ papers, onDelete }) {
   };
 
   return (
-    <div>
+    <div className="table-container">
       <table>
         <thead>
           <tr>
-            <th>Paper Name</th>
+            <th>Your papers</th>
           </tr>
         </thead>
         <tbody>
           {papers.map((paper, index) => (
             <tr key={index} onClick={() => handleRowClick(paper)}>
-              <td>{paper}</td>
+              <td>{paper.name}</td>
             </tr>
           ))}
         </tbody>
       </table>
       {selectedPaper && (
-        <div>
-          <button onClick={handleDelete}>Delete {selectedPaper}</button>
+        <div className="button-container">
+          <button onClick={() => alert(selectedPaper.summary)}>Show Summary {selectedPaper.name}</button>
+          <button onClick={() => handleDelete(selectedPaper)}>Delete {selectedPaper.name}</button>
         </div>
       )}
     </div>

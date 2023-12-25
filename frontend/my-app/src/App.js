@@ -1,3 +1,4 @@
+import './App.css';
 import React, { useCallback, useEffect, useState } from "react";
 import {PaperList,PdfUpload} from './PaperMethods';
 
@@ -18,13 +19,13 @@ function App() {
         fetchPapers();
     },[fetchPapers]);
 
-    const handleDeletePaper = async (paperName) => {
+    const handleDeletePaper = async (paper) => {
         fetch(url+"deletepdf", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: paperName }),
+          body: JSON.stringify(paper),
         })
         .then(async response => {
           const data = await response.json();
@@ -41,7 +42,7 @@ function App() {
 
     return (
         <div>
-          <h1>MEN el 2a5er</h1>
+          <h1>APP</h1>
           <PdfUpload onUploadSuccess={fetchPapers} />
           <PaperList papers={papers} onDelete={handleDeletePaper} />
         </div>
