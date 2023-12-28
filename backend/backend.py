@@ -1,7 +1,7 @@
 from chroma_database import collection
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from llm_feats import get_summary
+from llm_feats import get_embedding, get_summary
 from pydantic import BaseModel
 from utils import delete_document
 
@@ -102,3 +102,24 @@ def delete_pdf(paper: Paper):
             f" successfully. {file_deletion}"
         )
     }
+
+
+@app.post("/gettopk")
+def get_top_k(text: str, k=3):
+    input_embedding = get_embedding(text)
+    results = collection.query(
+        query_embeddings=[input_embedding],
+        n_results=k,
+    )
+    papers = []
+
+    for i in range(len(results["ids"])):
+        papers.append(
+            Paper(
+                _id=results["ids"][i],
+                name=results["metadatas"][i]["name"],
+                file_path=results["metadatas"][i]["file_path"],
+                summary=results["documents"][i],
+            )
+        )
+    return papers

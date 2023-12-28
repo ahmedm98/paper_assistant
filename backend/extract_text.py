@@ -6,6 +6,7 @@ def extract_text_from_xml(file_path):
     tree = ET.parse(file_path)
     root = tree.getroot()
 
+    # TODO make this better but only extracting relevant text.
     # Function to recursively extract text from each element
     def recurse_and_extract(element):
         text_content = ""

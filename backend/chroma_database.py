@@ -18,6 +18,8 @@ client.heartbeat()
 
 emb_fn = MyEmbeddingFunction()
 
-collection = client.get_collection(
-    name="my_collection", embedding_function=emb_fn
+collection = client.get_or_create_collection(
+    name="my_collection",
+    metadata={"hnsw:space": "cosine"},
+    embedding_function=emb_fn,
 )
