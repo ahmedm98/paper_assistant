@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=noto:wght@400;700&display=swap');
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the start of the flex container */
+}
+
+.search-input,
+.search-number,
+.search-buttons {
+  margin-bottom: 10px; /* Space between form elements */
+  width: 50%; /* Full width of the form */
+}
+
+.search-buttons {
+  display: flex;
+  justify-content: space-between; /* Space out buttons */
+}
+
+.app-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.papers-container, .summary-container {
+  flex: 1; /* Each container takes up half the width of the app-container */
+  padding: 20px; /* Add some padding for spacing */
+}
+
+/* Additional styles as needed */
+
+.search-input {
+  width: 100%; /* Full width of its container */
+  border-radius: 10px;
+  height:5;
+  padding: 12px; /* Larger padding for bigger appearance */
+  font-size: 1.2em; /* Larger font size */
+  margin: 10px 0; /* Margin for spacing */
+  resize: none;
+}
+body {
+    background-image: url('../public/denim.webp');
+    background-position: center;
+    color: #f5f5f5; /* Off-white font color */
+    font-family: 'Roboto', sans-serif; /* Example font */
+
+  }
+
+.table-container {
+    width: 100%; /* Full width */
+
+    background-color: #fff; /* White background for the table */
+    border-radius: 10px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensures the border radius applies to the table rows */
+    margin: 20px; /* Space around the table */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add some shadow for depth */
+  }
+  
+.table-container table {
+    width: 100%; /* Full width */
+    border-collapse: collapse; /* Removes the space between borders */
+  
+}
+  
+.table-container th,
+.table-container td {
+    text-align: center; /* Align text to the left */
+    padding: 12px 20px; /* Padding inside cells */
+    color: #333333; /* Specific font color for table cells */
+
+  }
+  
+.table-container tr {
+    border-bottom: 1px solid #ddd; /* Delimitation between rows */
+    cursor: pointer; /* Change cursor on hover */
+  }
+  
+.table-container tr:hover {
+    background-color: #f5f5f5; /* Highlight row on hover */
+  }
+  
+.table-container th {
+    background-color: #414aaa; /* Background color for the header */
+    color: rgb(248, 241, 241); /* White text for the header */
+  }
+  
+.button-container {
+    text-align: center; /* Center the buttons */
+    width: 100%; /* Match the width of the table */
+  }
