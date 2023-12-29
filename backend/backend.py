@@ -3,6 +3,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from llm_feats import get_embedding, get_summary
 from pydantic import BaseModel
+from typing import Optional
 from utils import delete_document
 
 
@@ -104,8 +105,15 @@ def delete_pdf(paper: Paper):
     }
 
 
-@app.post("/gettopk")
-def get_top_k(text: str, k=3):
+class SearchPaper(BaseModel):
+    text: str
+    k: Optional[int] = 2
+
+
+@app.post("/get_top_k")
+def get_top_k(input: SearchPaper):
+    text = input.text
+    k = input.k
     input_embedding = get_embedding(text)
     results = collection.query(
         query_embeddings=[input_embedding],
@@ -113,13 +121,13 @@ def get_top_k(text: str, k=3):
     )
     papers = []
 
-    for i in range(len(results["ids"])):
+    for i in range(len(results["ids"][0])):
         papers.append(
             Paper(
-                _id=results["ids"][i],
-                name=results["metadatas"][i]["name"],
-                file_path=results["metadatas"][i]["file_path"],
-                summary=results["documents"][i],
+                _id=results["ids"][0][i],
+                name=results["metadatas"][0][i]["name"],
+                file_path=results["metadatas"][0][i]["file_path"],
+                summary=results["documents"][0][i],
             )
         )
     return papers
