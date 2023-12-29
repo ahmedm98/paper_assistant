@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 
-function PaperList({ papers, onDelete }) {
+function PaperList({ papers, onDelete, onShowSummary }) {
   console.log('Rendering papers:', papers);
   const [selectedPaper, setSelectedPaper] = useState(null);
 
@@ -34,7 +34,7 @@ function PaperList({ papers, onDelete }) {
       </table>
       {selectedPaper && (
         <div className="button-container">
-          <button onClick={() => alert(selectedPaper.summary)}>Show Summary {selectedPaper.name}</button>
+          <button onClick={() => onShowSummary(selectedPaper)}> Show Summary {selectedPaper.name} </button>
           <button onClick={() => handleDelete(selectedPaper)}>Delete {selectedPaper.name}</button>
         </div>
       )}
@@ -87,6 +87,41 @@ function PdfUpload({onUploadSuccess}) {
 }
 
 
-export {PaperList, PdfUpload};
+function SearchBar({ onSearch, onReset }) {
+  const [searchText, setSearchText] = useState('');
+  const [k, setK] = useState(2); // Default value for k
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(searchText, k);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="search-form">
+      <textarea 
+        value={searchText} 
+        onChange={(e) => setSearchText(e.target.value)} 
+        placeholder="Enter search text"
+        rows={4}
+        className="search-input"
+      />
+      <input 
+        type="number" 
+        value={k} 
+        onChange={(e) => setK(e.target.value)} 
+        min="1"
+        className="search-number"
+      />
+      <div className="search-buttons">
+
+        <button type="submit">Search</button>
+        <button type="button" onClick={onReset}>Reset</button> {/* Reset button */}
+      </div>
+
+    </form>
+  );
+}
+
+export {PaperList, PdfUpload, SearchBar};
 
 
