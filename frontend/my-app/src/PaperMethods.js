@@ -44,44 +44,52 @@ function PaperList({ papers, onDelete, onShowSummary }) {
 
 
 function PdfUpload({onUploadSuccess}) {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    setSelectedFiles(Array.from(event.target.files));
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) {
-      alert('Please select a file first!');
+    if (!selectedFiles) {
+      alert('Please select files first!');
       return;
     }
+    setIsUploading(true); // Start uploading
 
-    const formData = new FormData();
-    formData.append('file', selectedFile);
+    for (const file of selectedFiles) {
+      const formData = new FormData();
+      formData.append('file', file);
 
-    try {
-      const response = await fetch('http://localhost:8000/uploadpdf', {
-        method: 'POST',
-        body: formData,
-      });
+      try {
+        const response = await fetch('http://localhost:8000/uploadpdf', {
+          method: 'POST',
+          body: formData,
+        });
 
-      if (response.ok) {
-        onUploadSuccess();
-        const data = await response.json();
-        alert(`File uploaded successfully. File ID: ${data.id}`);
-      } else {
-        alert('Failed to upload file.');
-      }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('Error uploading file');
-    }
+        if (response.ok) {
+          const data = await response.json();
+          console.log(`File uploaded successfully. File ID: ${data.id}`);
+        } else {
+          console.error('Failed to upload file:', file.name);
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }}
+    setIsUploading(false); // End uploading
+    onUploadSuccess();
+
+
+
   };
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} accept="application/pdf" />
-      <button onClick={handleUpload}>Upload PDF</button>
+      <input type="file" onChange={handleFileChange} accept="application/pdf" multiple/>
+      <button onClick={handleUpload} disabled={isUploading}> Upload PDF</button>
+      {isUploading && <div>Processing...</div>} {/* Display when uploading */}
     </div>
   );
 }
