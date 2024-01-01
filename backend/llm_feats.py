@@ -2,7 +2,7 @@ import json
 import os
 
 from dotenv import load_dotenv
-from extract_text import extract_text_from_xml
+from extract_text import TEIFile
 from grobid_client_python.grobid_client.grobid_client import GrobidClient
 from openai import OpenAI
 
@@ -37,11 +37,16 @@ def send_prompt_to_openai(prompt, system_role):
 
 def get_summary(paper: str):
     print(paper)
+
     process_pdf_grobid(file=f"files/{paper}")
     file_location = f"files/{paper.replace('.pdf','')}.grobid.tei.xml"
     print(file_location)
     if os.path.exists(file_location):
-        full_text = extract_text_from_xml(file_location)
+        teifile = TEIFile(file_location)
+        body = teifile.get_body()
+        body_texts = [t for para in body for t in para["text"]]
+        full_text = " ".join(body_texts)
+        # TODO check if full text exceeds the numbers of tokens.
     else:
         print("The xml file does not exist")
         return None
