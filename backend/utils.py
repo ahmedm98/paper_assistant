@@ -19,3 +19,10 @@ def delete_document(document_name):
         file_deletion_message = "No Files were found and deleted."
 
     return file_deletion_message
+
+
+def remove_last_x_percent(text: str, percent: int = 10):
+    words = text.split(" ")
+    n_words_to_remove = int(len(words) * (percent / 100))
+    words = words[: len(words) - n_words_to_remove]
+    return " ".join(words)
