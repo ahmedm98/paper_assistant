@@ -130,6 +130,29 @@ function SearchBar({ onSearch, onReset }) {
   );
 }
 
-export {PaperList, PdfUpload, SearchBar};
+
+function QuestionBox({ onSubmitQuestion , isLoading}) {
+  const [userQuestion, setUserQuestion] = useState("");
+
+  const handleSubmit = () => {
+      onSubmitQuestion(userQuestion);
+  };
+
+  return (
+    <div className="question-input-container">
+      <input 
+        type="text"
+        value={userQuestion}
+        onChange={(e) => setUserQuestion(e.target.value)}
+        placeholder="Enter your question here"
+      />
+      <button onClick={handleSubmit} disabled={isLoading}>
+        {isLoading ? "Processing..." : "Submit Question"}
+      </button>
+    </div>
+  );
+}
+
+export {PaperList, PdfUpload, SearchBar, QuestionBox};
 
 
