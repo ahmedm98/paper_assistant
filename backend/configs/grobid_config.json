@@ -1,5 +1,5 @@
 {
-    "grobid_server": "http://184.72.124.171:8070",
+    "grobid_server": "http://54.242.160.116:8070",
     "batch_size": 100,
     "sleep_time": 5,
     "timeout": 60,

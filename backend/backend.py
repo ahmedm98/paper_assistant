@@ -1,7 +1,7 @@
 from chroma_database import collection
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from llm_feats import get_embedding, get_summary
+from llm_feats import answer_question_rag, get_embedding, get_summary
 from pydantic import BaseModel
 from typing import Optional
 from utils import delete_document
@@ -115,10 +115,7 @@ def get_top_k(input: SearchPaper):
     text = input.text
     k = input.k
     input_embedding = get_embedding(text)
-    results = collection.query(
-        query_embeddings=[input_embedding],
-        n_results=k,
-    )
+    results = chroma_vector_search(input_embedding, k)
     papers = []
 
     for i in range(len(results["ids"][0])):
@@ -131,3 +128,23 @@ def get_top_k(input: SearchPaper):
             )
         )
     return papers
+
+
+class User_Question(BaseModel):
+    text: str
+
+
+@app.post("/get_rag")
+def get_rag(input_text: User_Question):
+    text = input_text.text
+    input_embedding = get_embedding(text)
+    top_documents = chroma_vector_search(input_embedding, 3)
+    response = answer_question_rag(question=text, context=top_documents)
+    return response
+
+
+def chroma_vector_search(input_embedding: list, k: int):
+    return collection.query(
+        query_embeddings=[input_embedding],
+        n_results=k,
+    )
