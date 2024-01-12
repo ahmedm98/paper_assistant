@@ -1,3 +1,5 @@
+import logging
+
 from chroma_database import collection
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -5,6 +7,8 @@ from llm_feats import answer_question_rag, get_embedding, get_summary
 from pydantic import BaseModel
 from typing import Optional
 from utils import delete_document
+
+logging.basicConfig(level=logging.INFO)
 
 
 class Paper(BaseModel):
@@ -76,7 +80,7 @@ def upload_file(file: UploadFile = File(...)):
         result_id = 1
     except ValueError:
         result_id = 0
-        print("The paper was not added to the database")
+        logging.error("The paper was not added to the database")
 
     return {"filename": file.filename, "id": str(result_id)}
 
@@ -96,7 +100,7 @@ def delete_pdf(paper: Paper):
             status_code=404,
             detail=f"File not found in database. {file_deletion}.",
         )
-    print(db_result, file_deletion)
+    logging.info(db_result, file_deletion)
     return {
         "message": (
             f"{db_result} Files with name {file_name} deleted"
