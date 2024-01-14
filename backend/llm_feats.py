@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 import tiktoken
@@ -8,13 +9,20 @@ from grobid_client_python.grobid_client.grobid_client import GrobidClient
 from openai import OpenAI
 from utils import remove_last_x_percent
 
+logging.basicConfig(level=logging.INFO)
+
 
 def process_pdf_grobid(
-    file, config_path="configs/grobid_config.json", output="./files/"
+    paper_location, config_path="configs/grobid_config.json"
 ):
     client = GrobidClient(config_path=config_path)
+    logging.info(f"sending {paper_location} to grobid")
     client.process(
-        "processFulltextDocument", "files/", output=output, force=True
+        "processFulltextDocument",
+        f"{paper_location}/",
+        output=paper_location,
+        force=True,
+        verbose=True,
     )
 
 
@@ -40,9 +48,9 @@ def send_prompt_to_openai(prompt, system_role):
 def get_summary(paper: str):
     print(paper)
 
-    process_pdf_grobid(file=f"files/{paper}")
-    file_location = f"files/{paper.replace('.pdf','')}.grobid.tei.xml"
-    print(file_location)
+    process_pdf_grobid(paper_location=f"files/{paper}")
+    file_location = f"files/{paper}/{paper}.grobid.tei.xml"
+    logging.info(file_location)
     try:
         os.path.exists(file_location)
         teifile = TEIFile(file_location)
@@ -56,7 +64,7 @@ def get_summary(paper: str):
 
         while n > config["context_window"]:  # text is too big
             full_text = remove_last_x_percent(full_text)
-            print("Text has been reduced,")
+            logging.info("Text has been reduced,")
             n = num_tokens_from_string(full_text)
 
         # noqa: E501
@@ -73,7 +81,7 @@ def get_summary(paper: str):
         return summary
 
     except Exception as e:
-        print(f"An error has occured: {e}")
+        logging.error(f"An error has occured: {e}")
 
 
 def get_embedding(text, model="text-embedding-ada-002"):
@@ -102,26 +110,27 @@ def num_tokens_from_string(string: str) -> int:
 def answer_question_rag(question: str, context: list):
     docs = []
     for i in range(len(context["ids"][0])):
-        print(context["ids"][0][i])
         paper = context["ids"][0][i]
-        file_location = f"files/{paper.replace('.pdf','')}.grobid.tei.xml"
-        os.path.exists(file_location)
-        teifile = TEIFile(file_location)
-        body = teifile.get_body()
-        body_texts = [t for para in body for t in para["text"]]
-        full_text = " ".join(body_texts)
-        docs.append(full_text)
+        file_location = f"files/{paper}/{paper}.grobid.tei.xml"
+
+        if os.path.exists(file_location):
+            logging.info(f"getting context from {file_location}")
+            teifile = TEIFile(file_location)
+            body = teifile.get_body()
+            body_texts = [t for para in body for t in para["text"]]
+            full_text = " ".join(body_texts)
+            docs.append(full_text)
 
     context_str = " ".join(docs)
 
     n = num_tokens_from_string(context_str)
-    print("Context number of tokens : ", n)
+    logging.info(f"Context number of tokens : {n}")
     with open("configs/openai_config.json", "r") as jsonfile:
         config = json.load(jsonfile)
 
     while n > config["context_window"]:  # text is too big
         context_str = remove_last_x_percent(context_str)
-        print("Text has been reduced,")
+        logging.info("Text has been reduced")
         n = num_tokens_from_string(context_str)
 
     system_role = (

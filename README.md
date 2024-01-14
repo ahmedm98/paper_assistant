@@ -18,7 +18,10 @@ To get the Paper Assistant Web Application up and running, follow these setup in
 
 ### 3. Running the Application
 
-Work In Progress
-
+- Make sure your [docker](https://www.docker.com/products/docker-desktop/) daemon is running.
+- In the root folder, run
+```
+docker compose up
+```
 # Software design
 ![software design graph](https://github.com/ahmedm98/paper_assistant/assets/40520382/5c32c834-7688-4732-bf71-8fd1b4dc36a2)

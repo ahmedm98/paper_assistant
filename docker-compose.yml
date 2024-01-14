@@ -2,15 +2,13 @@ version: "3.7"
 
 services:
   frontend:
-    build: frontend
+    build: frontend/my-app
     ports:
-      - 8501:8501
+      - 3000:3000
     networks: 
       - deploy_network
     depends_on:
       - backend
-    volumes:
-        - ./frontend:/app
 
   backend:
     build: backend
