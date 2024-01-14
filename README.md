@@ -12,9 +12,7 @@ To get the Paper Assistant Web Application up and running, follow these setup in
 ### 2. Configure OpenAI's Key ###
 
 - Obtain an API key from [OpenAI](https://platform.openai.com/docs/api-reference/authentication)
-- Add your OPENAI_KEY as 
-    - an environment variable named 'OPENAI_KEY'
-    - or place it in a .env file at the root of the project.
+- Place your OPENAI_KEY in a .env file in the backend folder.
 
 ### 3. Running the Application
 
