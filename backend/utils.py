@@ -1,7 +1,10 @@
 import glob
+import logging
 import os
 
 from pathlib import Path
+
+logging.basicConfig(level=logging.INFO)
 
 
 def delete_document(document_name):
@@ -9,10 +12,15 @@ def delete_document(document_name):
 
     files = []
     for filename in glob.glob(
-        str(Path(f"files/{document_name}")).replace(".pdf", ".*")
+        str(Path(f"files/{document_name}/{document_name}.*"))
     ):
         files.append(filename)
         os.remove(filename)
+
+    if os.path.exists(f"files/{document_name}"):
+        logging.info(f"delete folder files/{document_name}")
+        os.rmdir(Path(f"files/{document_name}"))
+
     if files != []:
         file_deletion_message = f"Files [{files}] were found and deleted."
     else:

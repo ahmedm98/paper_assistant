@@ -1,4 +1,5 @@
 import logging
+import os
 
 from chroma_database import collection
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -21,8 +22,6 @@ class Paper(BaseModel):
 app = FastAPI()
 
 
-# remove later. Just for development.
-# Not needed when deploying the frontend and backend on docker containers.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -42,25 +41,34 @@ def get_papers():
         papers.append(
             Paper(
                 _id=current_collection["ids"][i],
-                name=current_collection["metadatas"][i]["name"],
+                name=current_collection["metadatas"][i]["name"].replace(
+                    ".pdf", ""
+                ),
                 file_path=current_collection["metadatas"][i]["file_path"],
                 summary=current_collection["documents"][i],
             )
         )
-
+    print(papers)
     return papers
 
 
 @app.post("/uploadpdf")
 def upload_file(file: UploadFile = File(...)):
-    file_location = f"files/{file.filename}"
+    directory = f"files/{file.filename.replace('.pdf','')}"
+    file_location = directory + f"/{file.filename}"
+
+    # Check if the directory already exists
+    if not os.path.exists(directory):
+        # Create the directory
+        os.makedirs(directory)
+
     with open(file_location, "wb") as buffer:
         buffer.write(file.file.read())
 
     # produce and save a summary
-    summary = get_summary(file.filename)
+    summary = get_summary(file.filename.replace(".pdf", ""))
     paper_doc = {
-        "name": file.filename,
+        "name": file.filename.replace(".pdf", ""),
         "file_path": file_location,
         "summary": summary,
     }
@@ -90,6 +98,7 @@ def delete_pdf(paper: Paper):
     file_name = paper.name
     file_deletion = delete_document(file_name)
     try:
+        logging.info(f"deleting {file_name}")
         collection.delete([file_name])
         db_result = 1
     except ValueError:
@@ -100,7 +109,7 @@ def delete_pdf(paper: Paper):
             status_code=404,
             detail=f"File not found in database. {file_deletion}.",
         )
-    logging.info(db_result, file_deletion)
+    logging.info(str(db_result) + " -----" + file_deletion)
     return {
         "message": (
             f"{db_result} Files with name {file_name} deleted"
